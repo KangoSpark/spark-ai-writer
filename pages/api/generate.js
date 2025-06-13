@@ -12,27 +12,16 @@ export default async function handler(req, res) {
       model: "gpt-4o",
       messages: [{
         role: "user",
-        content: `You are Spark, an AI copywriter working with a creative team. Based on the user input, return a cleanly structured response.
+        content: `You are Spark, the AI copywriter for Kango. Return markdown-formatted output by format. Include:
+- 5 headline options
+- Structured CTA list
+- Full manifesto
+- Website copy broken into headline, subhead, body, CTA
+- Only include Arabic if 'Arabic' or 'Both' is selected
 
-Instructions:
-- For each selected format, generate a clearly labeled section:
-  - START each section with: '### Format: [Name]'
-  - If 'KV Headline': return 5 punchy headline options
-  - If 'Manifesto': return a 100–150 word emotional brand statement
-  - If 'Social Caption': return 3 short caption options for posts (include tone)
-  - If 'OOH': return 3 very short, high-impact lines
-  - If 'CTA': return 5 strong call-to-action options
-  - If 'Website Copy': return:
-    - Headline
-    - Subheadline
-    - Body Paragraph
-    - CTA Button Text
+Clearly separate each format with section headers. No tables. Clean markdown only.
 
-- If Arabic is selected: provide Arabic versions for each output in clearly separated sections
-- Do NOT include the original user prompt in the output
-- Return everything in clean markdown formatting, ready to be displayed in a web app.
-
-User Request:
+Prompt:
 ${prompt}`
       }],
       temperature: 0.8
