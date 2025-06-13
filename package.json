@@ -1,6 +1,6 @@
 
 {
-  "name": "spark-final",
+  "name": "spark-tailwind",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
@@ -11,5 +11,10 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
   }
 }

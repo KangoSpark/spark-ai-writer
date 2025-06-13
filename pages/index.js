@@ -26,26 +26,15 @@ const SparkWriter = () => {
   const handleSubmit = async () => {
     setLoading(true);
     const prompt = `
-You are Spark, an AI copywriter for a creative agency. Generate copy in the following format:
-- Return output in markdown blocks
-- Do NOT use tables
-- Each section must begin with '### Format: [Format Name]'
-- Arabic content only if 'Arabic' or 'Both' selected
-- KV Headline: 5 headline options
-- Manifesto: 100–150 word emotional brand statement
-- Social Caption: 3 short captions
-- OOH: 3 short outdoor lines
-- CTA: 5 call-to-action options
-- Website Copy: Headline, Subheadline, Body, CTA
-
-Input:
+You are Spark, an AI copywriter for a creative agency. Generate markdown-formatted copy with clean section labels.
+Use the following input:
 Brand: ${brand}
 Product: ${product}
 Formats: ${selectedFormats.join(", ")}
 Tone: ${tone}
 Audience: ${audience}
 Language: ${language}
-Core Idea: ${idea}
+Idea: ${idea}
 Feedback: ${feedback}
 `;
 
@@ -70,50 +59,64 @@ Feedback: ${feedback}
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6 font-sans bg-white text-black">
-      <h1 className="text-4xl font-bold mb-2 text-center">⚡️ Spark by Kango</h1>
-      <p className="text-center mb-6 text-gray-600">Your AI copywriter — full version with export, history, and Kango branding.</p>
+    <div className="max-w-4xl mx-auto px-6 py-8 space-y-8 font-sans text-black">
+      <h1 className="text-4xl font-bold text-center">⚡️ Spark by Kango</h1>
+      <p className="text-center text-gray-600">Your AI copywriter — full version with export, history, and Kango branding.</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input placeholder="Brand Name" value={brand} onChange={(e) => setBrand(e.target.value)} className="p-2 border rounded" />
-        <input placeholder="Product / Service" value={product} onChange={(e) => setProduct(e.target.value)} className="p-2 border rounded" />
-
-        <div className="md:col-span-2">
-          <label className="block mb-1 font-medium">Select Formats</label>
-          <div className="flex flex-wrap gap-3">
-            {formats.map(format => (
-              <label key={format} className="flex items-center gap-1 text-sm">
-                <input
-                  type="checkbox"
-                  value={format}
-                  checked={selectedFormats.includes(format)}
-                  onChange={() => toggleFormat(format)}
-                />
-                {format}
-              </label>
-            ))}
-          </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="font-medium">Brand Name</label>
+          <input value={brand} onChange={(e) => setBrand(e.target.value)} className="w-full p-2 border rounded" />
         </div>
+        <div className="space-y-2">
+          <label className="font-medium">Product / Service</label>
+          <input value={product} onChange={(e) => setProduct(e.target.value)} className="w-full p-2 border rounded" />
+        </div>
+      </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Tone</label>
+      <div className="space-y-2">
+        <label className="font-medium">Select Formats</label>
+        <div className="flex flex-wrap gap-4">
+          {formats.map(format => (
+            <label key={format} className="flex items-center gap-2 text-sm">
+              <input type="checkbox" value={format} checked={selectedFormats.includes(format)} onChange={() => toggleFormat(format)} />
+              {format}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="font-medium">Tone</label>
           <select value={tone} onChange={(e) => setTone(e.target.value)} className="w-full p-2 border rounded">
             {tones.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Language</label>
+        <div className="space-y-2">
+          <label className="font-medium">Language</label>
           <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full p-2 border rounded">
             <option value="English">English</option>
             <option value="Arabic">Arabic</option>
             <option value="Both">Both</option>
           </select>
         </div>
+      </div>
 
-        <input placeholder="Target Audience" value={audience} onChange={(e) => setAudience(e.target.value)} className="p-2 border rounded md:col-span-2" />
-        <textarea placeholder="Core Idea to Build On" value={idea} onChange={(e) => setIdea(e.target.value)} className="p-2 border rounded md:col-span-2" rows={3} />
-        <textarea placeholder="Feedback or Edits (optional)" value={feedback} onChange={(e) => setFeedback(e.target.value)} className="p-2 border rounded md:col-span-2" rows={2} />
+      <div className="space-y-2">
+        <label className="font-medium">Target Audience</label>
+        <input value={audience} onChange={(e) => setAudience(e.target.value)} className="w-full p-2 border rounded" />
+      </div>
+
+      <div className="space-y-2">
+        <label className="font-medium">Core Idea</label>
+        <textarea value={idea} onChange={(e) => setIdea(e.target.value)} className="w-full p-2 border rounded" rows={3} />
+      </div>
+
+      <div className="space-y-2">
+        <label className="font-medium">Feedback or Edits (optional)</label>
+        <textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} className="w-full p-2 border rounded" rows={2} />
       </div>
 
       <div className="text-center">
