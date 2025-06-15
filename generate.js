@@ -38,19 +38,17 @@ export default async function handler(req, res) {
 
   if (output.includes('Social Caption') || output.includes('Social Media Posts')) {
     promptSections.push(
-`### Social Media Calendar (Table Format Required)
+`### Social Media Calendar
 
-Generate a 5-day social media content calendar based on the brand idea, audience, and tone.
+| Day | Social Pillar | Definition of the Pillar | Social Caption | Visual Style | Platform |
+|-----|----------------|--------------------------|----------------|---------------|----------|
+|     |                |                          |                |               |          |
+|     |                |                          |                |               |          |
+|     |                |                          |                |               |          |
+|     |                |                          |                |               |          |
+|     |                |                          |                |               |          |
 
-Return only a Markdown table with the following columns:
-- **Day**
-- **Social Pillar** (e.g., product benefit, lifestyle, user moment, seasonal hook)
-- **Definition of the Pillar**
-- **Social Caption** (short, punchy, on-brand)
-- **Visual Style** (mix of static, carousel, and video)
-- **Platform** (e.g., Instagram, TikTok, Facebook)
-
-Do not add explanations. Only return the Markdown table.`
+Only return the table above filled with 5 relevant entries based on the brand, audience, and tone. Do not generate any additional copy or explanation.`
     );
   }
 
@@ -67,7 +65,7 @@ Please return the following creative deliverables:
 
 \${promptSections.join('\n\n')}
 
-Structure the output with clear section headers and line breaks. Use markdown formatting where helpful. Keep the tone aligned with the brief.\`;
+Use markdown formatting and follow the structure precisely. Do not include outputs that were not requested.\`;
 
   try {
     const response = await openai.chat.completions.create({
