@@ -40,17 +40,17 @@ export default async function handler(req, res) {
     promptSections.push(
 `### Social Media Calendar
 
-Generate a table with 5 days of social content based on the brand idea. Format as markdown.
+Generate a social media content calendar table for 5 days.
 
-Columns:
+Each row should include the following columns:
 - **Day**
-- **Social Pillar**
+- **Social Pillar** (e.g., product benefit, lifestyle, user moment, seasonal hook)
 - **Definition of the Pillar**
-- **Social Caption** (on-brand, engaging)
-- **Visual Style** (mix of static, carousel, and video)
-- **Platform** (e.g. Instagram, TikTok)
+- **Social Caption** (short, engaging, on-brand)
+- **Visual Style** (mix of static, carousel, video)
+- **Platform** (choose from Instagram, TikTok, or Facebook)
 
-Make each post aligned to the tone and idea provided.`
+Make the table easy to scan and format it in clean Markdown. Align all content with the brand idea, audience, and tone provided.`
     );
   }
 
