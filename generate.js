@@ -7,12 +7,20 @@ const openai = new OpenAI({
 export default async function handler(req, res) {
   const { brand, product, audience, idea, tone, output } = req.body;
 
+  // ✅ Log the incoming request for debugging
+  console.log("REQUEST BODY:", req.body);
+
   let prompt = "";
 
   const formattedTone = tone?.length ? tone.join(" and ") : "a suitable";
   const context = `You are an expert advertising copywriter creating work for ${brand}, a brand offering ${product}, targeting ${audience}. The core idea of the campaign is: ${idea}. Use ${formattedTone} tone in your writing.`;
 
-  if (output.includes("Social Caption") || output.includes("Social Media Posts")) {
+  // ✅ If ONLY "Social Media Posts" or "Social Caption" is selected, generate just the table
+  const requestedOnlySocial =
+    output.length === 1 &&
+    (output.includes("Social Media Posts") || output.includes("Social Caption"));
+
+  if (requestedOnlySocial) {
     prompt = `${context}
 
 ONLY generate the following Markdown table with 5 rows. Do NOT include any extra copy, fallback options, or commentary. ONLY return the table.
