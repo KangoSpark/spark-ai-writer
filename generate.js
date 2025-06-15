@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
   const promptSections = [];
 
-  if (output.includes('Headline')) {
+  if (output.includes('KV Headline') || output.includes('Headline')) {
     promptSections.push("### KV Headline\nGenerate 3–5 high-impact headline options that reflect the brand tone and core idea.");
   }
 
@@ -36,21 +36,21 @@ export default async function handler(req, res) {
     promptSections.push("### Activation Idea\nSuggest a creative activation idea that brings the concept to life in an unexpected way.");
   }
 
-  if (output.includes('Social Media Posts')) {
+  if (output.includes('Social Caption') || output.includes('Social Media Posts')) {
     promptSections.push(
-`### Social Media Calendar
+`### Social Media Calendar (Table Format Required)
 
-Generate a social media content calendar table for 5 days.
+Generate a 5-day social media content calendar based on the brand idea, audience, and tone.
 
-Each row should include the following columns:
+Return only a Markdown table with the following columns:
 - **Day**
 - **Social Pillar** (e.g., product benefit, lifestyle, user moment, seasonal hook)
 - **Definition of the Pillar**
-- **Social Caption** (short, engaging, on-brand)
-- **Visual Style** (mix of static, carousel, video)
-- **Platform** (choose from Instagram, TikTok, or Facebook)
+- **Social Caption** (short, punchy, on-brand)
+- **Visual Style** (mix of static, carousel, and video)
+- **Platform** (e.g., Instagram, TikTok, Facebook)
 
-Make the table easy to scan and format it in clean Markdown. Align all content with the brand idea, audience, and tone provided.`
+Do not add explanations. Only return the Markdown table.`
     );
   }
 
@@ -67,7 +67,7 @@ Please return the following creative deliverables:
 
 \${promptSections.join('\n\n')}
 
-Structure the output with clear section headers and line breaks. Use markdown-style formatting where helpful. Keep the tone aligned with the brief.\`;
+Structure the output with clear section headers and line breaks. Use markdown formatting where helpful. Keep the tone aligned with the brief.\`;
 
   try {
     const response = await openai.chat.completions.create({
