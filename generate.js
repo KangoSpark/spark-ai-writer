@@ -8,16 +8,12 @@ const openai = new OpenAI({
 export default async function handler(req, res) {
   const { brand, product, audience, idea, tone, output } = req.body;
 
-  const formattedTone = tone?.length ? tone.join(" and ") : "a suitable";
-  const context = \`You are an expert advertising copywriter creating work for \${brand}, a brand offering \${product}, targeting \${audience}. The core idea of the campaign is: \${idea}. Use \${formattedTone} tone in your writing.\`;
-
-  const includesSocial = output.includes("Social Caption") || output.includes("Social Media Posts");
-  const otherOutputs = output.filter(item => !["Social Caption", "Social Media Posts"].includes(item));
-
   let prompt = "";
+  const formattedTone = tone?.length ? tone.join(" and ") : "a suitable";
+  const context = `You are an expert advertising copywriter creating work for ${brand}, a brand offering ${product}, targeting ${audience}. The core idea of the campaign is: ${idea}. Use ${formattedTone} tone in your writing.`;
 
-  if (includesSocial && otherOutputs.length === 0) {
-    prompt = \`\${context}
+  if (output.includes("Social Caption") || output.includes("Social Media Posts")) {
+    prompt = `${context}
 
 ONLY generate the following Markdown table with 5 rows. Do NOT include any extra copy, fallback options, or commentary. ONLY return the table.
 
@@ -29,21 +25,11 @@ ONLY generate the following Markdown table with 5 rows. Do NOT include any extra
 | Saturday  |                    |                                                  |                                                              |              |          |
 | Sunday    |                    |                                                  |                                                              |              |          |
 
-Be sure to fill out all columns appropriately and DO NOT generate anything else.\`;
+Be sure to fill out all columns appropriately and DO NOT generate anything else.`;
   } else {
-    prompt = \`\${context}
+    prompt = `${context}
 
-Based on the selected outputs: \${output.join(", ")}, generate the appropriate advertising content. If "Social Caption" or "Social Media Posts" are selected along with others, include the social captions as a separate Markdown table with 5 rows, formatted as:
-
-| Day       | Social Pillar      | Definition of the Pillar                        | Social Caption                                               | Visual Style | Platform |
-|-----------|--------------------|--------------------------------------------------|--------------------------------------------------------------|--------------|----------|
-| Monday    |                    |                                                  |                                                              |              |          |
-| Wednesday |                    |                                                  |                                                              |              |          |
-| Friday    |                    |                                                  |                                                              |              |          |
-| Saturday  |                    |                                                  |                                                              |              |          |
-| Sunday    |                    |                                                  |                                                              |              |          |
-
-Return the rest of the content in clearly labeled sections: Headline, Manifesto, Website Copy, etc.\`;
+Based on the selected outputs: ${output.join(", ")}, generate the appropriate advertising content.`;
   }
 
   const chatCompletion = await openai.chat.completions.create({
