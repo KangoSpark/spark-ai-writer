@@ -12,13 +12,13 @@ document.getElementById("generateButton").addEventListener("click", async () => 
     audience: getValue("audience"),
     idea: getValue("coreidea"),
     tone: getValue("tone")?.split(",").map((t) => t.trim()),
-    output: getCheckedOutputs()
+    output: getCheckedOutputs(),
   };
 
   const res = await fetch("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
 
   const data = await res.json();
