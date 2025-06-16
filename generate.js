@@ -55,3 +55,9 @@ Based on the selected outputs: ${normalizedOutput.join(", ")}, generate the appr
     res.status(500).json({ error: "An error occurred while generating content." });
   }
 }
+
+    res.status(200).json({ result: chatCompletion.choices[0].message.content });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while generating content." });
+  }
+}
