@@ -8,17 +8,15 @@ const openai = new OpenAI({
 export default async function handler(req, res) {
   const { brand, product, audience, idea, tone, output } = req.body;
 
-  let prompt = "";
   const formattedTone = tone?.length ? tone.join(" and ") : "a suitable";
   const context = \`You are an expert advertising copywriter creating work for \${brand}, a brand offering \${product}, targeting \${audience}. The core idea of the campaign is: \${idea}. Use \${formattedTone} tone in your writing.\`;
 
-  const normalizedOutput = output.map(item => item.toLowerCase().trim());
+  const includesSocial = output.includes("Social Caption") || output.includes("Social Media Posts");
+  const otherOutputs = output.filter(item => !["Social Caption", "Social Media Posts"].includes(item));
 
-  const isSocialPost = normalizedOutput.some(item =>
-    item.includes("social caption") || item.includes("social media")
-  );
+  let prompt = "";
 
-  if (isSocialPost && output.length === 1) {
+  if (includesSocial && otherOutputs.length === 0) {
     prompt = \`\${context}
 
 ONLY generate the following Markdown table with 5 rows. Do NOT include any extra copy, fallback options, or commentary. ONLY return the table.
@@ -35,7 +33,17 @@ Be sure to fill out all columns appropriately and DO NOT generate anything else.
   } else {
     prompt = \`\${context}
 
-Based on the selected outputs: \${output.join(", ")}, generate the appropriate advertising content. If "Social Media Posts" is one of the selected outputs, include them in a Markdown table with columns for Day, Social Pillar, Definition of the Pillar, Social Caption, Visual Style, and Platform.\`;
+Based on the selected outputs: \${output.join(", ")}, generate the appropriate advertising content. If "Social Caption" or "Social Media Posts" are selected along with others, include the social captions as a separate Markdown table with 5 rows, formatted as:
+
+| Day       | Social Pillar      | Definition of the Pillar                        | Social Caption                                               | Visual Style | Platform |
+|-----------|--------------------|--------------------------------------------------|--------------------------------------------------------------|--------------|----------|
+| Monday    |                    |                                                  |                                                              |              |          |
+| Wednesday |                    |                                                  |                                                              |              |          |
+| Friday    |                    |                                                  |                                                              |              |          |
+| Saturday  |                    |                                                  |                                                              |              |          |
+| Sunday    |                    |                                                  |                                                              |              |          |
+
+Return the rest of the content in clearly labeled sections: Headline, Manifesto, Website Copy, etc.\`;
   }
 
   const chatCompletion = await openai.chat.completions.create({
