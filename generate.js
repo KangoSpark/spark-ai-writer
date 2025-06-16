@@ -1,3 +1,4 @@
+// Force redeploy - fixing social content output
 import { OpenAI } from "openai";
 
 const openai = new OpenAI({
