@@ -1,20 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Spark AI Writer</title>
 </head>
 <body>
-  <input id="brandname" placeholder="Brand" />
-  <input id="productorservice" placeholder="Product or Service" />
-  <input id="audience" placeholder="Audience" />
-  <input id="coreidea" placeholder="Core Idea" />
-  <input id="tone" placeholder="Tone (comma separated)" />
-  <label><input type="checkbox" name="output" value="Social Media Posts" /> Social Media Posts</label>
-  <label><input type="checkbox" name="output" value="Manifesto" /> Manifesto</label>
-  <label><input type="checkbox" name="output" value="Website Copy" /> Website Copy</label>
+  <h1>Spark AI Writer</h1>
+
+  <label>Brand: <input type="text" id="brandname" /></label><br />
+  <label>Product/Service: <input type="text" id="productorservice" /></label><br />
+  <label>Audience: <input type="text" id="audience" /></label><br />
+  <label>Core Idea: <input type="text" id="coreidea" /></label><br />
+  <label>Tone (comma-separated): <input type="text" id="tone" /></label><br />
+
+  <fieldset>
+    <legend>Select Output Formats:</legend>
+    <label>
+      <input type="checkbox" name="output" value="Headline"> Headline
+    </label><br />
+    <label>
+      <input type="checkbox" name="output" value="Manifesto"> Manifesto
+    </label><br />
+    <label>
+      <input type="checkbox" name="output" value="Website Copy"> Website Copy
+    </label><br />
+    <label>
+      <input type="checkbox" name="output" value="Social Media Posts"> Social Media Posts
+    </label><br />
+  </fieldset>
+
   <button id="generateButton">Generate</button>
+
   <pre id="suggestions"></pre>
-  <script src="./index.js"></script>
+
+  <script>
+    document.getElementById("generateButton").addEventListener("click", async () => {
+      const getValue = (id) => document.getElementById(id)?.value || "";
+
+      const getCheckedOutputs = () =>
+        Array.from(document.querySelectorAll("input[name='output']:checked")).map(
+          (el) => el.value
+        );
+
+      const body = {
+        brand: getValue("brandname"),
+        product: getValue("productorservice"),
+        audience: getValue("audience"),
+        idea: getValue("coreidea"),
+        tone: getValue("tone")?.split(",").map((t) => t.trim()),
+        output: getCheckedOutputs(),
+      };
+
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+      document.getElementById("suggestions").innerText = data.result || "No result.";
+    });
+  </script>
 </body>
 </html>
